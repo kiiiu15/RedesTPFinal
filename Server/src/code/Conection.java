@@ -13,12 +13,12 @@ public class Conection extends Thread {
 
     private final Socket socket;
     private final DataOutputStream speaker;
-    private final BufferedReader reader;
+    private final DataInputStream reader;
 
     public Conection(Socket socket) throws IOException {
         this.socket = socket;
         this.speaker = new DataOutputStream(this.socket.getOutputStream());
-        this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        this.reader = new DataInputStream(this.socket.getInputStream());
     }
 
 
@@ -52,26 +52,28 @@ public class Conection extends Thread {
     }
 
     private boolean listenAndSpeak() throws IOException {
-        this.speaker.writeUTF("> ");
-        String inMessage = null;
-        inMessage = Optional.ofNullable(this.reader.readLine()).orElseThrow(IOException::new);
+
+        String inMessage = Optional.ofNullable(this.reader.readUTF()).orElseThrow(IOException::new);
         if ("X".equalsIgnoreCase(inMessage)) {
             System.out.println("The client ended the conection");
-            this.speaker.writeUTF("\n You ended the conection");
             return false;
         }
-        System.out.print("< " + inMessage + "\n> ");
+        System.out.print(inMessage + "\n> ");
         String outMessage = new Scanner(System.in).nextLine();
         if ("X".equalsIgnoreCase(outMessage)) {
             System.out.println("You ended the conection");
-            this.speaker.writeUTF("\nThe server ended the conection");
+            this.speaker.writeUTF(outMessage);
             return false;
         }
-        this.speaker.writeUTF("\n< " + outMessage + "\n");
+        this.speaker.writeUTF("< " + outMessage + "\n");
         return true;
     }
 
-
+    /**
+     * to close coneection
+     *
+     * @throws IOException if there a problem closing coneection
+     */
     private void disconnect() throws IOException {
         this.socket.close();
     }
