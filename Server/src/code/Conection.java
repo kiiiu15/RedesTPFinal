@@ -21,14 +21,19 @@ public class Conection extends Thread {
     }
 
 
+    /**
+     * To simulate a conversation log, we add '>' before typing a message as an input and a '<' before the response
+     */
     @Override
     public void run() {
         try {
+            this.speaker.writeUTF("> ");
             String inMessage = null;
             inMessage = this.reader.readLine();
-            System.out.println(inMessage);
+            System.out.print("< "+inMessage + "\n> ");
             String outMessage = new Scanner(System.in).nextLine();
             this.speaker.writeUTF(outMessage);
+            this.socket.close();
 
         } catch (IOException e) {
             e.printStackTrace();
