@@ -2,6 +2,7 @@ package code;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Optional;
 import java.util.Scanner;
 
 /**
@@ -53,7 +54,7 @@ public class Conection extends Thread {
     private boolean listenAndSpeak() throws IOException {
         this.speaker.writeUTF("> ");
         String inMessage = null;
-        inMessage = this.reader.readLine();
+        inMessage = Optional.ofNullable(this.reader.readLine()).orElseThrow(IOException::new);
         if ("X".equalsIgnoreCase(inMessage)) {
             System.out.println("The client ended the conection");
             this.speaker.writeUTF("\n You ended the conection");
@@ -63,7 +64,7 @@ public class Conection extends Thread {
         String outMessage = new Scanner(System.in).nextLine();
         if ("X".equalsIgnoreCase(outMessage)) {
             System.out.println("You ended the conection");
-            this.speaker.writeUTF("The server ended the conection");
+            this.speaker.writeUTF("\nThe server ended the conection");
             return false;
         }
         this.speaker.writeUTF("\n< " + outMessage + "\n");
