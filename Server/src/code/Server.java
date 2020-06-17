@@ -32,6 +32,8 @@ public class Server {
             System.out.println("Waiting conection");
             Socket socket = this.serverSocket.accept();
             System.out.println("Conection accepted");
+            Conection conn = new Conection(socket);
+            conn.start();
         }
 
 
