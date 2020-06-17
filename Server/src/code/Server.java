@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
 /**
  * This class will be one who open a socket server on a port and accepts conection from costumers
  * Each costumer is attended in a separated thread to handle multiple clients
@@ -42,8 +43,10 @@ public class Server {
 
 
     public static void main(String[] args) {
+        System.out.println("Setting up the server on port 3000");
         try {
             Server server = new Server();
+            System.out.println("Server set up correctly, put server to run");
             server.run();
         } catch (IOException e) {
             System.out.println("There was a problem setting the server up");

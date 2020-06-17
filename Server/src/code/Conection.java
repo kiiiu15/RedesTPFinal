@@ -1,6 +1,10 @@
 package code;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * This class is made to represent the server treatment to the costumer conection, it extends from a thread to free the server
@@ -9,20 +13,27 @@ import java.net.Socket;
 public class Conection extends Thread {
 
     private  final Socket socket;
+    private final DataOutputStream speaker;
+    private final DataInputStream reader;
 
-    public Conection(Socket socket) {
+    public Conection(Socket socket) throws IOException {
         this.socket = socket;
+        this.speaker = new DataOutputStream(this.socket.getOutputStream());
+        this.reader = new DataInputStream(this.socket.getInputStream());
     }
 
 
     @Override
     public void run() {
-        System.out.println("Conexion: " + super.getId() + "Running");
         try {
-            Thread.sleep(10000); // this was to check if i could run multiple clients at once
-        } catch (InterruptedException e) {
+            String inMessage = null;
+            inMessage = this.reader.readUTF();
+            System.out.println(inMessage);
+            String outMessage = new Scanner(System.in).nextLine();
+            this.speaker.writeUTF(outMessage);
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Conexion: " + super.getId() + "Closing");
     }
 }
