@@ -55,7 +55,7 @@ public class Conection extends Thread {
         if ("X".equalsIgnoreCase(outMessage)){
             return false;
         }
-        this.speaker.writeUTF("< "+outMessage+"\n");
+        this.speaker.writeUTF("\n< "+outMessage+"\n");
         return true;
     }
 
