@@ -27,16 +27,39 @@ public class Conection extends Thread {
     @Override
     public void run() {
         try {
-            this.speaker.writeUTF("> ");
-            String inMessage = null;
-            inMessage = this.reader.readLine();
-            System.out.print("< "+inMessage + "\n> ");
-            String outMessage = new Scanner(System.in).nextLine();
-            this.speaker.writeUTF(outMessage);
-            this.socket.close();
+
+            boolean keepTalking = true;
+
+            do {
+                keepTalking = listenAndSpeak();
+            }while (true == keepTalking);
+            this.disconnect();
 
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+
         }
+
+    }
+
+    private boolean listenAndSpeak() throws IOException {
+        this.speaker.writeUTF("> ");
+        String inMessage = null;
+        inMessage = this.reader.readLine();
+        if ("X".equalsIgnoreCase(inMessage)) {
+            return false;
+        }
+        System.out.print("< "+inMessage + "\n> ");
+        String outMessage = new Scanner(System.in).nextLine();
+        this.speaker.writeUTF(outMessage);
+        return true;
+    }
+
+
+
+
+    private void disconnect () throws IOException {
+        this.socket.close();
     }
 }
