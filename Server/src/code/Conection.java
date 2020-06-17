@@ -65,7 +65,7 @@ public class Conection extends Thread {
             this.speaker.writeUTF(outMessage);
             return false;
         }
-        this.speaker.writeUTF("< " + outMessage + "\n");
+        this.speaker.writeUTF("< " + outMessage );
         return true;
     }
 
