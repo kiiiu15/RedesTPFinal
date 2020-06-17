@@ -37,8 +37,6 @@ public class Conection extends Thread {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-
         }
 
     }
@@ -48,11 +46,15 @@ public class Conection extends Thread {
         String inMessage = null;
         inMessage = this.reader.readLine();
         if ("X".equalsIgnoreCase(inMessage)) {
+            System.out.println("The client ended the conection");
+            this.speaker.writeUTF("\n You ended the conection");
             return false;
         }
         System.out.print("< "+inMessage + "\n> ");
         String outMessage = new Scanner(System.in).nextLine();
         if ("X".equalsIgnoreCase(outMessage)){
+            System.out.println("You ended the conection");
+            this.speaker.writeUTF("The server ended the conection");
             return false;
         }
         this.speaker.writeUTF("\n< "+outMessage+"\n");
