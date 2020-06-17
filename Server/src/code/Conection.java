@@ -1,8 +1,6 @@
 package code;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -14,12 +12,12 @@ public class Conection extends Thread {
 
     private  final Socket socket;
     private final DataOutputStream speaker;
-    private final DataInputStream reader;
+    private final BufferedReader reader;
 
     public Conection(Socket socket) throws IOException {
         this.socket = socket;
         this.speaker = new DataOutputStream(this.socket.getOutputStream());
-        this.reader = new DataInputStream(this.socket.getInputStream());
+        this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
     }
 
 
@@ -27,7 +25,7 @@ public class Conection extends Thread {
     public void run() {
         try {
             String inMessage = null;
-            inMessage = this.reader.readUTF();
+            inMessage = this.reader.readLine();
             System.out.println(inMessage);
             String outMessage = new Scanner(System.in).nextLine();
             this.speaker.writeUTF(outMessage);
