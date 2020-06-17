@@ -52,6 +52,9 @@ public class Conection extends Thread {
         }
         System.out.print("< "+inMessage + "\n> ");
         String outMessage = new Scanner(System.in).nextLine();
+        if ("X".equalsIgnoreCase(outMessage)){
+            return false;
+        }
         this.speaker.writeUTF(outMessage);
         return true;
     }
