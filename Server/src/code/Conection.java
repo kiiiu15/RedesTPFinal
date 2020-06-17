@@ -10,7 +10,7 @@ import java.util.Scanner;
  */
 public class Conection extends Thread {
 
-    private  final Socket socket;
+    private final Socket socket;
     private final DataOutputStream speaker;
     private final BufferedReader reader;
 
@@ -26,18 +26,27 @@ public class Conection extends Thread {
      */
     @Override
     public void run() {
-        try {
 
-            boolean keepTalking = true;
 
-            do {
+        boolean keepTalking = true;
+
+        do {
+            try {
                 keepTalking = listenAndSpeak();
-            }while (true == keepTalking);
-            this.disconnect();
-
+            } catch (IOException e) {
+                System.out.println("There were problems during the comunication. Conection lost");
+                keepTalking = false;
+            }
+        } while (true == keepTalking);
+        try {
+            this.disconnect(); //we don't know if we got here because there was an error or someone wanted to end comunication
+            //so we try to close the socket anyways
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            Thread.currentThread().interrupt();//stop the thread.
         }
+
 
     }
 
@@ -50,21 +59,19 @@ public class Conection extends Thread {
             this.speaker.writeUTF("\n You ended the conection");
             return false;
         }
-        System.out.print("< "+inMessage + "\n> ");
+        System.out.print("< " + inMessage + "\n> ");
         String outMessage = new Scanner(System.in).nextLine();
-        if ("X".equalsIgnoreCase(outMessage)){
+        if ("X".equalsIgnoreCase(outMessage)) {
             System.out.println("You ended the conection");
             this.speaker.writeUTF("The server ended the conection");
             return false;
         }
-        this.speaker.writeUTF("\n< "+outMessage+"\n");
+        this.speaker.writeUTF("\n< " + outMessage + "\n");
         return true;
     }
 
 
-
-
-    private void disconnect () throws IOException {
+    private void disconnect() throws IOException {
         this.socket.close();
     }
 }
