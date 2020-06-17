@@ -33,8 +33,13 @@ public class Server {
             System.out.println("Waiting conection");
             Socket socket = this.serverSocket.accept();
             System.out.println("Conection accepted");
-            Conection conn = new Conection(socket);
-            conn.start();
+            try {
+                Conection conn = new Conection(socket);
+                conn.start();
+            }catch (IOException ex){
+                System.out.println("\nThere was prblem conecting with the client, conection aborted");
+            }
+
         }
 
 
