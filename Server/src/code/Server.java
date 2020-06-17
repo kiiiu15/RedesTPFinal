@@ -3,6 +3,7 @@ package code;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * This class will be one who open a socket server on a port and accepts conection from costumers
@@ -21,10 +22,27 @@ public class Server {
         this.serverSocket = new ServerSocket(PORT);
     }
 
+    /**
+     * Once the server was set up correctly we put it to run invocking these method
+     * @throws IOException if there is a problem accepting conections.
+     */
+    public void run() throws IOException {
+
+        while (true){
+            System.out.println("Waiting conection");
+            Socket socket = this.serverSocket.accept();
+            System.out.println("Conection accepted");
+        }
+
+
+
+    }
+
 
     public static void main(String[] args) {
         try {
             Server server = new Server();
+            server.run();
         } catch (IOException e) {
             System.out.println("There was a problem setting the server up");
         }
